@@ -9,7 +9,7 @@ def parseFile(fname):
   # print('parsing file:', fname)
 
   # Read JPG
-  cvImg = cv2.imread(fname)
+  cvImg = cv2.imread('./src/' + fname)
 
   # Turn the image grayscale
   # cvGray = cv2.cvtColor(cvImg, cv2.COLOR_BGR2GRAY)
@@ -61,8 +61,8 @@ def parseFile(fname):
   iPeriod = fname.index('.')
   expected = fname[iDash:iPeriod]
 
-  # newName = './clean/' + fname[0:iPeriod] + '-clean.jpg'
-  # cv2.imwrite(newName, maskGreen)
+  newName = './dst/' + fname[0:iPeriod] + '-clean.jpg'
+  cv2.imwrite(newName, maskGreen)
 
   if (expected == "none"):
     expected = ""
@@ -74,12 +74,9 @@ def parseFile(fname):
   else:
     print(fname, ' processed properly')
 
-  # Print out the string
-  # print(fname, ' read as: ', ocr)
-
 # Read through all the files in the directory
-for dirname, dirnames, filenames in os.walk('.'):
+for dirname, dirnames, filenames in os.walk('./src/'):
   for filename in filenames:
-    if (filename.endswith('.jpg')):
-      parseFile(filename)
+    # if (filename.endswith('.jpg')):
+    parseFile(filename)
       # break
