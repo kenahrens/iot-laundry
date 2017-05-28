@@ -1,10 +1,12 @@
+var newrelic = require('newrelic');
+
 var express = require('express');
 var bodyParser = require('body-parser');
 var fs = require('fs');
 
 // Helper functions
 var checkFile = require('./lib/checkFile.js');
-var imgProcess = require('./lib/imgProcess.js');
+var processor = require('./lib/processor.js');
 
 // Initialization
 var port = process.env.PORT || 8888;
@@ -37,7 +39,7 @@ app.post('/img', imgParser, function(req, res, next) {
     }
     res.send(resMsg);
 
-    fs.writeFile('./uploads/rpi-' + ts + '.jpg', req.body);
+    fs.writeFile('./uploads/' + filename, req.body);
   } else {
     console.error('Some problem getting file.');
     res.status(500);

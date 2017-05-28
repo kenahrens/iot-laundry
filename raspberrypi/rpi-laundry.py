@@ -33,13 +33,17 @@ for foo in camera.capture_continuous(stream, 'jpeg'):
   print('Captured image!')
   
   # Send the image to the back end
-  res = requests.post(url='http://envy5:8888/img',
-  	data=stream.getvalue(),
-  	headers={'Content-Type': 'image/jpeg'})
-  
+  statusCode = 0
+  try:
+    res = requests.post(url='http://envy5:8888/img',
+    	data=stream.getvalue(),
+  	  headers={'Content-Type': 'image/jpeg'})
+    statusCode = res.status_code
+  finally:
+    print('Response: ', statusCode)
+
   # Reset the stream
   stream.seek(0)
   stream.truncate()
 
-  print('Response: ', res.status_code)
   time.sleep(15)
