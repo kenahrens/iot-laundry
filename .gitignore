@@ -60,5 +60,6 @@ typings/
 # vscode
 .vscode
 
-# uploads
+# stored images
+archive/
 uploads/
