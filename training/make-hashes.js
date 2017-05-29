@@ -2,8 +2,8 @@ var Jimp = require('jimp');
 var fs = require('fs');
 
 // Generate hashes for all the files
-var imgPath = './training/dst/';
-var resPath = './training/';
+var imgPath = './training/images/';
+var hashResult = './lib/hashes.json';
 
 var fileCount = 0;
 var runningCount = 0;
@@ -11,14 +11,11 @@ var hashes = {};
 
 // Grab just the number from the filename
 // ex: dark-28-clean.jpg returns 28
-var getValue = function getValue(fname) {
-  var iDash1 = fname.indexOf('-') + 1;
-  var iDash2 = fname.indexOf('-', iDash1);
-  var value = fname.substring(iDash1, iDash2)
-  if (value == 'none') {
-    value = '0';
-  }
-  return value;
+var getNumber = function getNumber(fname) {
+  var iDash = fname.indexOf('-') + 1;
+  var iDot = fname.lastIndexOf('.');
+  var num = fname.substring(iDash, iDot)
+  return num;
 }
 
 // Strip off the path and just get the filename (no extension)
@@ -32,20 +29,19 @@ var getShortName = function getShortName(fname) {
 // Save the hash and check if we got them all
 var saveHash = function saveHash(fname, hash) {
   var shortName = getShortName(fname);
-  var value = getValue(fname);
-  console.log('save hash: ' + shortName + ' (' + value + ') ' + hash);
+  var num = getNumber(fname);
+  console.log('save hash: ' + shortName + ' (' + num + ') ' + hash);
   hashes[hash] = {
     name: shortName,
-    value: value,
+    num: num,
     hash: hash
   };
 
   // Check if we got all the data
   if (runningCount == fileCount) {
     console.log('Got all the hashes: ' + runningCount + ', store off results');
-    var resultFname = resPath + 'hashes.json';
-    fs.writeFileSync(resultFname, JSON.stringify(hashes));
-    console.log(resultFname + ' written.');
+    fs.writeFileSync(hashResult, JSON.stringify(hashes));
+    console.log(hashResult + ' written.');
   }
 }
 
