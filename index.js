@@ -2,7 +2,11 @@ var newrelic = require('newrelic');
 
 var express = require('express');
 var bodyParser = require('body-parser');
+
+// These are used to store the files
 var fs = require('fs');
+var moment = require('moment');
+var mkdirp = require('mkdirp');
 
 // Helper functions
 var checkFile = require('./lib/checkFile.js');
@@ -29,7 +33,8 @@ app.get('/', function(req, res) {
 app.post('/img', imgParser, function(req, res, next) {
   var resMsg = {};
   if (req.body != null) {
-    var filename = 'rpi-' + new Date().getTime() + '.jpg';
+    var ts = new Date().getTime();
+    var filename = 'rpi-' + ts + '.jpg';
     console.log('Just received image', filename, 'of size:', req.body.length);
     
     var resMsg = {
@@ -39,7 +44,13 @@ app.post('/img', imgParser, function(req, res, next) {
     }
     res.send(resMsg);
 
-    fs.writeFile('./uploads/' + filename, req.body);
+    // Write new files to the archives directory
+    var mo = moment(parseInt(ts));
+    var dirname = './archive/' + mo.format('YYYY-MM-DD') + '/' + mo.format('HH');
+    mkdirp(dirname, function(err) {
+      if (err) { throw err; }
+      fs.writeFile(dirname + '/' + filename, req.body);
+    });
   } else {
     console.error('Some problem getting file.');
     res.status(500);
