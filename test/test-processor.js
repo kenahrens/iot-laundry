@@ -4,9 +4,10 @@ var fs = require('fs');
 var assert = require('assert');
 
 // This image used for testing the reading code, 
-var imgLight12 = './test/images/light-12-orig.jpg';
-var hashLight12 = 'bj9gsM0800g';
-var numLight = '12';
+var imgLight = './test/images/light-0-orig.jpg';
+// var hashLight12 = 'bj9gsM0800g';
+var hashLight = '00000000000';
+var numLight = '0';
 
 // Runtime values
 var buffLight, tstHashLight;
@@ -14,14 +15,14 @@ var buffLight, tstHashLight;
 describe('processor tests', function() {
 
   it('reads test image light 12', function(done) {
-    buffLight = fs.readFileSync(imgLight12);
+    buffLight = fs.readFileSync(imgLight);
     done();
   });
 
   it('hashes the test image light 12', function(done) {
     processor.hashBuffer(buffLight, function(hash) {
       tstHashLight = hash;
-      assert.equal(hash, hashLight12);
+      assert.equal(hash, hashLight);
       done();
     })
   });

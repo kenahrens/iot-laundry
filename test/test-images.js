@@ -24,19 +24,19 @@ describe('Image conversion tests', function() {
   it('Matches dark 0', function(done) {
     runTest(imgDark0, 0, done);
   });
-  it('Matches dark 14', function(done) {
-    runTest(imgDark14, 14, done);
-  });
-  it('Matches dark 37', function(done) {
-    runTest(imgDark37, 37, done);
-  });
+  // it('Matches dark 14', function(done) {
+  //   runTest(imgDark14, 14, done);
+  // });
+  // it('Matches dark 37', function(done) {
+  //   runTest(imgDark37, 37, done);
+  // });
   it('Matches light 0', function(done) {
     runTest(imgLight0, 0, done);
   });
-  it('Matches light 12', function(done) {
-    runTest(imgLight12, 12, done);
-  });
-  it('Matches light 31', function(done) {
-    runTest(imgLight31, 31, done);
-  });
+  // it('Matches light 12', function(done) {
+  //   runTest(imgLight12, 12, done);
+  // });
+  // it('Matches light 31', function(done) {
+  //   runTest(imgLight31, 31, done);
+  // });
 });

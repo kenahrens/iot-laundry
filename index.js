@@ -103,7 +103,7 @@ var storePicture = function storePicture(ts, filename, body) {
     // Custom attributes for NR
     newrelic.addCustomParameter('filename', fullFilename);
     newrelic.addCustomParameter('length', body.length);
-  })
+  });
 }
 
 // Allow loading of the images
