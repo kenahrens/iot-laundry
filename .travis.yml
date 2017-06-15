@@ -8,8 +8,8 @@ node_js:
 
 sudo: required
 
-services:
-  - docker
+# services:
+  # - docker
 
 compiler: clang
 
