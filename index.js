@@ -32,7 +32,7 @@ app.get('/', function(req, res) {
   var resMsg = '<html><head><title>IoT Laundry</title></head><body>';
   var j=0;
   for (var i=pictures.length; i >= 0; i--) {
-    if (j >= 5) { break; }
+    if (j >= 10) { break; }
     var pic = pictures[i];
     if (pic != null) {
       pic = pic.substring(9); // Cut off the ./archive from the front
@@ -57,21 +57,20 @@ app.get('/stats', function(req, res) {
 // This receives the POST with a raw image parser
 app.post('/img', imgParser, function(req, res, next) {
   console.log('POST /img');
-  var resMsg = {};
   if (req.body != null) {
     var ts = new Date().getTime();
     var filename = 'rpi-' + ts + '.jpg';
     console.log('Just received image', filename, 'of size:', req.body.length);
     
+    // Store the pictures
+    storePicture(ts, filename, req.body);
+
     var resMsg = {
       result: 'success',
       filename: filename,
       size: req.body.length
     }
     res.send(resMsg);
-
-    // Store the pictures
-    storePicture(ts, filename, req.body);
 
   } else {
     console.error('Some problem getting file.');
@@ -94,10 +93,16 @@ var storePicture = function storePicture(ts, filename, body) {
     }
     var fullFilename = dirname + '/' + filename;
     fs.writeFile(fullFilename, body);
+    
+    // Add to the pictures array, and remove oldest value if needed
     pictures.push(fullFilename);
     if (pictures.length >= 100) {
-      pictures.pop();
+      pictures.splice(1,1);
     }
+
+    // Custom attributes for NR
+    newrelic.addCustomParameter('filename', fullFilename);
+    newrelic.addCustomParameter('length', body.length);
   })
 }
 
