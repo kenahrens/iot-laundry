@@ -30,21 +30,18 @@ camera.start_preview()
 time.sleep(2)
 print('Camera is warmed up.')
 
-for foo in camera.capture_continuous(stream, 'jpeg'):
-  print('Captured image!')
-  
-  # Send the image to the back end
-  statusCode = 0
-  try:
-    res = requests.post(url='http://envy5:8888/img',
-    	data=stream.getvalue(),
-  	  headers={'Content-Type': 'image/jpeg'})
-    statusCode = res.status_code
-  finally:
-    print('Response: ', statusCode)
+camera.capture(stream, 'jpeg')
+ 
+# Send the image to the back end
+statusCode = 0
+try:
+  res = requests.post(url='http://envy5:8888/img',
+  	data=stream.getvalue(),
+	  headers={'Content-Type': 'image/jpeg'})
+  statusCode = res.status_code
+finally:
+  print('Response: ', statusCode)
 
-  # Reset the stream
-  stream.seek(0)
-  stream.truncate()
-
-  time.sleep(15)
+# Reset the stream
+#stream.seek(0)
+#stream.truncate()

@@ -30,9 +30,9 @@ camera.start_preview()
 time.sleep(2)
 print('Camera is warmed up.')
 
-for foo in camera.capture_continuous(stream, 'jpeg'):
-  print('Captured image!')
-  
+for x in range(0, 3):
+  camera.capture(stream, 'jpeg')
+ 
   # Send the image to the back end
   statusCode = 0
   try:
@@ -47,4 +47,5 @@ for foo in camera.capture_continuous(stream, 'jpeg'):
   stream.seek(0)
   stream.truncate()
 
+  # Sleep for 15 seconds
   time.sleep(15)
