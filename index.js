@@ -29,8 +29,21 @@ var pictures = [];
 // Return a page with the most recent images
 app.get('/', function(req, res) {
   console.log('GET /');
-  var resMsg = '<html><head><title>IoT Laundry</title></head><body>';
+  var resMsg = '<html><head>';
+  resMsg += newrelic.getBrowserTimingHeader();
+  resMsg += '<title>IoT Laundry</title></head><body>';
   var j=0;
+
+  // Get the filename of the newest picture
+  var fname = pictures[pictures.length-1];
+  if (fname != null) {
+    var tsLatest = fname.substring(fname.lastIndexOf('-')+1, fname.lastIndexOf('.'));
+    var tsNow = (new Date).getTime();
+    var tsDiff = (tsNow - tsLatest) / 1000;
+    resMsg += '<h1>Last Image Taken: ' + tsDiff + ' sec ago</h1>';
+  }
+
+  // Loop through the pictures
   for (var i=pictures.length; i >= 0; i--) {
     if (j >= 10) { break; }
     var pic = pictures[i];
@@ -101,8 +114,9 @@ var storePicture = function storePicture(ts, filename, body) {
     }
 
     // Custom attributes for NR
-    newrelic.addCustomParameter('filename', fullFilename);
-    newrelic.addCustomParameter('length', body.length);
+    newrelic.addCustomParameter('imgFilename', filename);
+    newrelic.addCustomParameter('imgFullFilename', fullFilename);
+    newrelic.addCustomParameter('imgLength', body.length);
   });
 }
 
