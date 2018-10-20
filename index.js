@@ -105,7 +105,7 @@ var storePicture = function storePicture(ts, filename, body) {
       throw err;
     }
     var fullFilename = dirname + '/' + filename;
-    fs.writeFile(fullFilename, body);
+    fs.writeFileSync(fullFilename, body);
     
     // Add to the pictures array, and remove oldest value if needed
     pictures.push(fullFilename);
@@ -114,9 +114,9 @@ var storePicture = function storePicture(ts, filename, body) {
     }
 
     // Custom attributes for NR
-    newrelic.addCustomParameter('imgFilename', filename);
-    newrelic.addCustomParameter('imgFullFilename', fullFilename);
-    newrelic.addCustomParameter('imgLength', body.length);
+    newrelic.addCustomAttribute('imgFilename', filename);
+    newrelic.addCustomAttribute('imgFullFilename', fullFilename);
+    newrelic.addCustomAttribute('imgLength', body.length);
   });
 }
 

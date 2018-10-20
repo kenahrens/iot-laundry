@@ -28,6 +28,6 @@
     "opencv": "^6.0.0"
   },
   "devDependencies": {
-    "mocha": "^3.4.2"
+    "mocha": "^5.2.0"
   }
 }
