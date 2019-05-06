@@ -13,7 +13,7 @@ var checkFile = require('./lib/checkFile.js');
 var processor = require('./lib/processor.js');
 
 // Initialization
-var port = process.env.PORT || 8888;
+var port = process.env.PORT || 3000;
 var app = express();
 
 // Setup image parser to treat image data as raw buffer
