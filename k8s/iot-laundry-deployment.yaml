@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iot-laundry
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: iot-laundry
+  template:
+    metadata:
+      labels:
+        app: iot-laundry
+    spec:
+      containers:
+      - name: iot-laundry
+        image: iot-laundry:1.0.0
+        livenessProbe:
+          httpGet:
+            path: /stats
+            port: 8888
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        ports:
+        - containerPort: 8888
+          protocol: TCP
+        env:
+        - name: PORT
+          value: "8888"
+        - name: NEW_RELIC_APP_NAME
+          value: "IoT Laundry Server"
+        - name: NEW_RELIC_LICENSE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: newrelic
+              key: NEW_RELIC_LICENSE_KEY
