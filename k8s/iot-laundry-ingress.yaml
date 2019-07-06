@@ -3,6 +3,10 @@ kind: Ingress
 metadata:
   name: iot-laundry
 spec:
-  backend:
-    serviceName: iot-laundry
-    servicePort: 8888
+  rules:
+  - host: laundry.minikube
+    http:
+      paths:
+      - backend:
+          serviceName: iot-laundry
+          servicePort: 8888
