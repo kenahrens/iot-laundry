@@ -8,10 +8,6 @@ var fs = require('fs');
 var moment = require('moment');
 var mkdirp = require('mkdirp');
 
-// Helper functions
-var checkFile = require('./lib/checkFile.js');
-var processor = require('./lib/processor.js');
-
 // Initialization
 var port = process.env.PORT || 3000;
 var app = express();
