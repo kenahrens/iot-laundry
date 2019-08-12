@@ -63,3 +63,7 @@ typings/
 # stored images
 archive/
 uploads/
+
+# tensorflow images and checkpoints
+tensorflow/laundry/
+tensorflow/checkpoints/
