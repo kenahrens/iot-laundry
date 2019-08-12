@@ -22,5 +22,5 @@ archive/
 uploads/
 
 # tensorflow images and checkpoints
-tf-train/laundry/
-tf-train/checkpoints/
+svc-predict/tf-train/laundry/
+svc-predict/tf-train/checkpoints/
