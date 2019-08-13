@@ -2,6 +2,7 @@ var newrelic = require('newrelic');
 
 var express = require('express');
 var bodyParser = require('body-parser');
+var request = require('request');
 
 // These are used to store the files
 var fs = require('fs');
@@ -71,16 +72,46 @@ app.post('/img', imgParser, function(req, res, next) {
     var filename = 'rpi-' + ts + '.jpg';
     console.log('Just received image', filename, 'of size:', req.body.length);
     
-    // Store the pictures
-    storePicture(ts, filename, req.body);
+    // Check the prediction service
+    var options = {
+      method: 'POST',
+      url: 'http://svc-predict:5000/predict',
+      body: req.body,
+      headers: {
+        'Content-Type': 'image/jpeg'
+      }
+    };
+    console.log('About to POST to predict service', options);
+    request(options, function (error, response, body) {
+      // Check for errors
+      if (error) {
+        throw new Error(error);
+      }
 
-    var resMsg = {
-      result: 'success',
-      filename: filename,
-      size: req.body.length
-    }
-    res.send(resMsg);
+      // Check for bad status
+      if (response.statusCode != 200) {
+        throw new Error('Bad response code: ' + response.statusCode);
+      }
 
+      // We must have good data
+      jBody = JSON.parse(body)
+      if (jBody.predict != 0) {
+        // Only store non-zero pictures
+        storePicture(ts, filename, req.body);
+      } else {
+        console.log('Skipping this picture of a 0');
+      }
+
+      // Send the response back to the raspberry pi
+      var resMsg = {
+        result: 'success',
+        predict: jBody.predict,
+        confidence: jBody.confidence,
+        filename: filename,
+        size: req.body.length
+      }
+      res.send(resMsg);
+    });
   } else {
     console.error('Some problem getting file.');
     res.status(500);

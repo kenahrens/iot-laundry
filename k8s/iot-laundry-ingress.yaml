@@ -1,12 +1,25 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: iot-laundry
+  name: svc-web
 spec:
   rules:
   - host: laundry.minikube
     http:
       paths:
       - backend:
-          serviceName: iot-laundry
+          serviceName: svc-web
           servicePort: 8888
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: svc-predict
+spec:
+  rules:
+  - host: predict.minikube
+    http:
+      paths:
+      - backend:
+          serviceName: svc-predict
+          servicePort: 5000

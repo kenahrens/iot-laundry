@@ -1,6 +1,6 @@
 {
   "name": "iot-laundry",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "laundry online",
   "main": "index.js",
   "scripts": {
@@ -18,13 +18,13 @@
   "homepage": "https://github.com/kenahrens/iot-laundry#readme",
   "dependencies": {
     "@newrelic/native-metrics": "^2.1.1",
-    "@tensorflow/tfjs-node": "^1.2.7",
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
     "lodash": "^4.17.14",
     "mkdirp": "^0.5.1",
     "moment": "^2.18.1",
-    "newrelic": "^4.1.1"
+    "newrelic": "^4.1.1",
+    "request": "^2.88.0"
   },
   "devDependencies": {
     "mocha": "^5.2.0"

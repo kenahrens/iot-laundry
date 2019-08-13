@@ -1,0 +1,4 @@
+flask
+numpy
+matplotlib
+tensorflow==2.0.0b1

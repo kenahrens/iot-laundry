@@ -1,20 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: iot-laundry
+  name: svc-web
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: iot-laundry
+      app: svc-web
   template:
     metadata:
       labels:
-        app: iot-laundry
+        app: svc-web
     spec:
       containers:
-      - name: iot-laundry
-        image: iot-laundry:1.0.0
+      - name: svc-web
+        image: kenahrens/svc-web
+        imagePullPolicy: Never
         livenessProbe:
           httpGet:
             path: /stats
@@ -29,6 +30,42 @@ spec:
           value: "8888"
         - name: NEW_RELIC_APP_NAME
           value: "IoT Laundry Server"
+        - name: NEW_RELIC_LICENSE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: newrelic
+              key: NEW_RELIC_LICENSE_KEY
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: svc-predict
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: svc-predict
+  template:
+    metadata:
+      labels:
+        app: svc-predict
+    spec:
+      containers:
+      - name: svc-predict
+        image: kenahrens/svc-predict
+        imagePullPolicy: Never
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        ports:
+        - containerPort: 5000
+          protocol: TCP
+        env:
+        - name: NEW_RELIC_APP_NAME
+          value: "IoT Laundry Prediction"
         - name: NEW_RELIC_LICENSE_KEY
           valueFrom:
             secretKeyRef:

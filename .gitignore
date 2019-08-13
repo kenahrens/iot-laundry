@@ -22,5 +22,8 @@ svc-web/archive/
 svc-web/uploads/
 
 # tensorflow images and checkpoints
-svc-predict/tf-train/laundry/
-svc-predict/tf-train/checkpoints/
+svc-predict/tftrain/laundry/
+svc-predict/tftrain/checkpoints/
+
+# python
+*.pyc
