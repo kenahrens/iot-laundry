@@ -69,8 +69,7 @@ app.post('/img', imgParser, function(req, res, next) {
   console.log('POST /img');
   if (req.body != null) {
     var ts = new Date().getTime();
-    var filename = 'rpi-' + ts + '.jpg';
-    console.log('Just received image', filename, 'of size:', req.body.length);
+    console.log('Just received image of size:', req.body.length);
     
     // Check the prediction service
     var options = {
@@ -81,7 +80,6 @@ app.post('/img', imgParser, function(req, res, next) {
         'Content-Type': 'image/jpeg'
       }
     };
-    console.log('About to POST to predict service', options);
     request(options, function (error, response, body) {
       // Check for errors
       if (error) {
@@ -94,13 +92,17 @@ app.post('/img', imgParser, function(req, res, next) {
       }
 
       // We must have good data
-      jBody = JSON.parse(body)
-      if (jBody.predict != 0) {
-        // Only store non-zero pictures
-        storePicture(ts, filename, req.body);
-      } else {
-        console.log('Skipping this picture of a 0');
-      }
+      jBody = JSON.parse(body);
+      var filename = 'rpi-' + ts + '-' + jBody.predict + '.jpg';
+      console.log(jBody);
+      // if (jBody.predict != 0) {
+      //   // Only store non-zero pictures
+      //   storePicture(ts, filename, req.body);
+      // } else {
+      //   console.log('Skipping this picture of a 0');
+      // }
+
+      storePicture(ts, filename, req.body);
 
       // Send the response back to the raspberry pi
       var resMsg = {
