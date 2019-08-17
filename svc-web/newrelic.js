@@ -22,5 +22,8 @@ exports.config = {
      * production applications.
      */
     level: 'info'
+  },
+  distributed_tracing: {
+    enabled: true
   }
 }

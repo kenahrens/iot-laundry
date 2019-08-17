@@ -23,7 +23,7 @@
     "lodash": "^4.17.14",
     "mkdirp": "^0.5.1",
     "moment": "^2.18.1",
-    "newrelic": "^4.1.1",
+    "newrelic": "^5.11.0",
     "request": "^2.88.0"
   },
   "devDependencies": {
