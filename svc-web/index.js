@@ -103,6 +103,10 @@ app.post('/img', imgParser, function(req, res, next) {
       jBody = JSON.parse(body);
       var filename = 'rpi-' + ts + '-' + jBody.predict + '.jpg';
       console.log(jBody);
+
+      newrelic.addCustomAttribute('imgFilename', filename);
+      newrelic.addCustomAttribute('prediction', jBody.predict);
+
       // if (jBody.predict != 0) {
       //   // Only store non-zero pictures
       //   storePicture(ts, filename, req.body);
@@ -149,11 +153,6 @@ var storePicture = function storePicture(ts, filename, body) {
     if (pictures.length >= 100) {
       pictures.splice(1,1);
     }
-
-    // Custom attributes for NR
-    newrelic.addCustomAttribute('imgFilename', filename);
-    newrelic.addCustomAttribute('imgFullFilename', fullFilename);
-    newrelic.addCustomAttribute('imgLength', body.length);
   });
 }
 
