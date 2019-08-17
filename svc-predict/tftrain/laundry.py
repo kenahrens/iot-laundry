@@ -67,33 +67,34 @@ class LaundryModel:
         img = np.expand_dims(img, axis=0)
         return self.model.predict(img)
 
-# These functions are outside of the LaundryModel object
-def plot_history(history):
-    # Plot training & validation accuracy values
-    plt.plot(history.history['accuracy'])
-    plt.plot(history.history['val_accuracy'])
-    plt.title('Model accuracy')
-    plt.ylabel('Accuracy')
-    plt.xlabel('Epoch')
-    plt.legend(['Train', 'Test'], loc='upper left')
-    plt.show()
+class LaundryUtil:
+    # These functions are outside of the LaundryModel object
+    def plot_history(history):
+        # Plot training & validation accuracy values
+        plt.plot(history.history['accuracy'])
+        plt.plot(history.history['val_accuracy'])
+        plt.title('Model accuracy')
+        plt.ylabel('Accuracy')
+        plt.xlabel('Epoch')
+        plt.legend(['Train', 'Test'], loc='upper left')
+        plt.show()
 
-def make_generator(dirname):
-    datagen = ImageDataGenerator(rescale=1./255)
-    generator = datagen.flow_from_directory(
-        dirname,
-        target_size=(SHAPE_X, SHAPE_Y),
-        batch_size=32,
-        class_mode='binary')
-    return generator
+    def make_generator(dirname):
+        datagen = ImageDataGenerator(rescale=1./255)
+        generator = datagen.flow_from_directory(
+            dirname,
+            target_size=(SHAPE_X, SHAPE_Y),
+            batch_size=32,
+            class_mode='binary')
+        return generator
 
-def preprocess(jpeg):
-    img = tf.image.decode_jpeg(jpeg, channels=3)
-    img = tf.image.resize(img, [SHAPE_X, SHAPE_Y])
-    img /= 255.0  # normalize to [0,1] range  
-    return img
+    def preprocess(jpeg):
+        img = tf.image.decode_jpeg(jpeg, channels=3)
+        img = tf.image.resize(img, [SHAPE_X, SHAPE_Y])
+        img /= 255.0  # normalize to [0,1] range  
+        return img
 
-def load_and_preprocess_img(path):
-    jpeg = tf.io.read_file(path)
-    img = preprocess(img)
-    return img
+    def load_and_preprocess_img(path):
+        jpeg = tf.io.read_file(path)
+        img = LaundryUtil.preprocess(img)
+        return img
