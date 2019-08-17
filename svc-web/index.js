@@ -34,11 +34,15 @@ app.get('/', function(req, res) {
   // Get the filename of the newest picture
   var fname = pictures[pictures.length-1];
   if (fname != null) {
-    var tsLatest = fname.substring(fname.lastIndexOf('-')+1, fname.lastIndexOf('.'));
+    var fIndex = fname.indexOf("rpi-");
+    var lIndex = fname.lastIndexOf("-");
+    var tsLatest = fname.substring(fIndex + 4, lIndex);
     var tsNow = (new Date).getTime();
     var tsDiff = (tsNow - tsLatest) / 1000;
     resMsg += '<h1>Last Image Taken: ' + tsDiff + ' sec ago</h1>';
   }
+  
+  resMsg += '<table><tr><th>Image</th><th>Prediction</th></tr>';
 
   // Loop through the pictures
   for (var i=pictures.length; i >= 0; i--) {
@@ -46,11 +50,15 @@ app.get('/', function(req, res) {
     var pic = pictures[i];
     if (pic != null) {
       pic = pic.substring(9); // Cut off the ./archive from the front
-      resMsg += '<img src=' + pic + '><br>';
+      resMsg += '<tr><td><img src=' + pic + '></td>';
+      var fIndex = pic.lastIndexOf('-');
+      var lIndex = pic.lastIndexOf('.');
+      var prediction = pic.substring(fIndex + 1, lIndex)
+      resMsg += '<td>' + prediction + '</td></tr>'
     }
     j++;
   }
-  resMsg += '</html>';
+  resMsg += '</table></html>';
   res.send(resMsg);
 });
 
