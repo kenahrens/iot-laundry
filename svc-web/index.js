@@ -107,14 +107,14 @@ app.post('/img', imgParser, function(req, res, next) {
       newrelic.addCustomAttribute('imgFilename', filename);
       newrelic.addCustomAttribute('prediction', jBody.predict);
 
-      // if (jBody.predict != 0) {
-      //   // Only store non-zero pictures
-      //   storePicture(ts, filename, req.body);
-      // } else {
-      //   console.log('Skipping this picture of a 0');
-      // }
+      if (jBody.predict != 0) {
+        // Only store non-zero pictures
+        storePicture(ts, filename, req.body, jBody.predict);
+      } else {
+        console.log('Skipping this picture of a 0');
+      }
 
-      storePicture(ts, filename, req.body);
+      // storePicture(ts, filename, req.body);
 
       // Send the response back to the raspberry pi
       var resMsg = {
@@ -135,10 +135,13 @@ app.post('/img', imgParser, function(req, res, next) {
 
 // Helper function to store off a picture
 // TODO: Move to library function
-var storePicture = function storePicture(ts, filename, body) {
+var storePicture = function storePicture(ts, filename, body, predict) {
   // Write new files to the archives directory
   var mo = moment(parseInt(ts));
-  var dirname = './archive/' + mo.format('YYYY-MM-DD') + '/' + mo.format('HH');
+  // var dirname = './archive/' + mo.format('YYYY-MM-DD') + '/' + mo.format('HH');
+  
+  // Create the directory for the day with sub directory for predictions
+  var dirname = './archive/' + mo.format('YYYY-MM-DD') + '/' + predict;
   
   // Create the directory
   mkdirp(dirname, function(err) {
