@@ -64,8 +64,6 @@ spec:
         - containerPort: 5000
           protocol: TCP
         env:
-        - name: NEW_RELIC_APP_NAME
-          value: "IoT Laundry Prediction"
         - name: NEW_RELIC_LICENSE_KEY
           valueFrom:
             secretKeyRef:

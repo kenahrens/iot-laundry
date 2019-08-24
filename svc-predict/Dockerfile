@@ -4,7 +4,8 @@ WORKDIR /usr/src/app
 
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
+ENV NEW_RELIC_CONFIG_FILE=newrelic.ini
 
 COPY . .
 
-CMD [ "python", "./server.py" ]
+CMD [ "newrelic-admin", "run-program", "python", "./server.py" ]

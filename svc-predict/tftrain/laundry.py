@@ -40,7 +40,7 @@ class LaundryModel:
             tf.keras.layers.Dropout(0.2),
             tf.keras.layers.Flatten(),
             tf.keras.layers.Dense(64, activation='relu'),
-            tf.keras.layers.Dense(67, activation='softmax')
+            tf.keras.layers.Dense(40, activation='softmax')
         ])
         # Compile the model
         self.model.compile(optimizer='adam',
@@ -63,7 +63,7 @@ class LaundryModel:
         self.model.load_weights(latest)
 
     def predict(self, jpeg):
-        img = preprocess(jpeg)
+        img = LaundryUtil.preprocess(jpeg)
         img = np.expand_dims(img, axis=0)
         return self.model.predict(img)
 
