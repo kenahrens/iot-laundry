@@ -21,13 +21,19 @@ SHAPE_X = 256
 SHAPE_Y = 320
 SHAPE_Z = 3
 
-checkpoint_path = "checkpoints/cp.ckpt"
+checkpoint_path = "checkpoints/weights.{epoch:02d}-accuracy{val_accuracy:.2f}.hdf5"
 checkpoint_dir = os.path.dirname(checkpoint_path)
+log_dir = "logs"
 
 # Create a callback that saves the model's weights
-cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path,
-                                                 save_weights_only=True,
-                                                 verbose=1)
+cb_checkpoint = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path,
+                                                save_weights_only=True,
+                                                verbose=1)
+
+cb_earlystopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss',
+                                                mode='min',
+                                                verbose=1,
+                                                patience=1)
 
 class LaundryModel:
     def __init__(self):
@@ -54,7 +60,7 @@ class LaundryModel:
             epochs=10,
             validation_data=validation_generator,
             validation_steps=50,
-            callbacks=[cp_callback])
+            callbacks=[cb_checkpoint, cb_earlystopping])
         return history
     
     def load_checkpoint(self, prefix):
