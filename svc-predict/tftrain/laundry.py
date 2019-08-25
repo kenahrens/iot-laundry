@@ -58,9 +58,8 @@ class LaundryModel:
         return history
     
     def load_checkpoint(self, prefix):
-        print('Getting latest checkpoint from', prefix + checkpoint_dir)
-        latest = tf.train.latest_checkpoint(prefix + checkpoint_dir)
-        self.model.load_weights(latest)
+        print('Getting latest checkpoint from', prefix + weights_final)
+        self.model.load_weights(prefix + weights_final)
 
     def predict(self, jpeg):
         img = LaundryUtil.preprocess(jpeg)
