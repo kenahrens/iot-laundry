@@ -35,6 +35,14 @@ spec:
             secretKeyRef:
               name: newrelic
               key: NEW_RELIC_LICENSE_KEY
+        volumeMounts:
+        - name: local-volume
+          mountPath: /app/archive
+      volumes:
+      - name: local-volume
+        hostPath:
+          path: /hosthome/kahrens/Pictures/archive
+          type: Directory
 ---
 apiVersion: apps/v1
 kind: Deployment
