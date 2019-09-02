@@ -52,4 +52,4 @@ def img():
 
 # Can't run with debug because with reloader it tries to connect to camera twice
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=False, host='0.0.0.0')

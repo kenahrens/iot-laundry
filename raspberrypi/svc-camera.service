@@ -1,0 +1,15 @@
+[Unit]
+Description=Laundry Camera
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/bin/bash /home/pi/dev/svc-camera/wrappedServer.sh
+WorkingDirectory=/home/pi/dev/svc-camera
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target
