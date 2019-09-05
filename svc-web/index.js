@@ -4,10 +4,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var request = require('request');
 
-// These are used to store the files
-var fs = require('fs');
-var moment = require('moment');
-var mkdirp = require('mkdirp');
+var store = require('./lib/store');
 
 // Initialization
 var port = process.env.PORT || 3000;
@@ -109,12 +106,16 @@ app.post('/img', imgParser, function(req, res, next) {
 
       if (jBody.predict != 0) {
         // Only store non-zero pictures
-        storePicture(ts, filename, req.body, jBody.predict);
+        var fullFilename = store.storePicture(ts, filename, req.body, jBody.predict);
+            
+        // Add to the pictures array, and remove oldest value if needed
+        pictures.push(fullFilename);
+        if (pictures.length >= 100) {
+          pictures.splice(1,1);
+        }
       } else {
         console.log('Skipping this picture of a 0');
       }
-
-      // storePicture(ts, filename, req.body);
 
       // Send the response back to the raspberry pi
       var resMsg = {
@@ -132,32 +133,6 @@ app.post('/img', imgParser, function(req, res, next) {
     res.send({result: 'failed'});
   }
 });
-
-// Helper function to store off a picture
-// TODO: Move to library function
-var storePicture = function storePicture(ts, filename, body, predict) {
-  // Write new files to the archives directory
-  var mo = moment(parseInt(ts));
-  // var dirname = './archive/' + mo.format('YYYY-MM-DD') + '/' + mo.format('HH');
-  
-  // Create the directory for the day with sub directory for predictions
-  var dirname = './archive/' + mo.format('YYYY-MM-DD') + '/' + predict;
-  
-  // Create the directory
-  mkdirp(dirname, function(err) {
-    if (err) {
-      throw err;
-    }
-    var fullFilename = dirname + '/' + filename;
-    fs.writeFileSync(fullFilename, body);
-    
-    // Add to the pictures array, and remove oldest value if needed
-    pictures.push(fullFilename);
-    if (pictures.length >= 100) {
-      pictures.splice(1,1);
-    }
-  });
-}
 
 // Allow loading of the images
 app.use(express.static('archive'));
