@@ -13,6 +13,7 @@ pids
 
 # Dependency directories
 svc-web/node_modules/
+svc-track/node_modules/
 
 # vscode
 .vscode
