@@ -97,12 +97,12 @@ app.post('/img', imgParser, function(req, res, next) {
       }
 
       // We must have good data
-      jBody = JSON.parse(body);
+      var jBody = JSON.parse(body);
       var filename = 'rpi-' + ts + '-' + jBody.predict + '.jpg';
-      console.log(jBody);
 
       newrelic.addCustomAttribute('imgFilename', filename);
       newrelic.addCustomAttribute('prediction', jBody.predict);
+      newrelic.addCustomAttribute('confidence', jBody.confidence);
 
       if (jBody.predict != 0) {
         // Only store non-zero pictures
@@ -113,11 +113,12 @@ app.post('/img', imgParser, function(req, res, next) {
         if (pictures.length >= 100) {
           pictures.splice(1,1);
         }
+        console.log('Storing this picture of a', jBody.predict);
       } else {
         console.log('Skipping this picture of a 0');
       }
 
-      // Send the response back to the raspberry pi
+      // Build the response back to the raspberry pi
       var resMsg = {
         result: 'success',
         predict: jBody.predict,
@@ -125,6 +126,11 @@ app.post('/img', imgParser, function(req, res, next) {
         filename: filename,
         size: req.body.length
       }
+
+      // Publish the response message to the track service
+      pubToTrack(resMsg);
+
+      // Send the response message back to the raspberry pi
       res.send(resMsg);
     });
   } else {
@@ -133,6 +139,29 @@ app.post('/img', imgParser, function(req, res, next) {
     res.send({result: 'failed'});
   }
 });
+
+var pubToTrack = function(resMsg) {
+  var options = {
+    method: 'POST',
+    url: 'http://svc-track:8889/storePredict',
+    body: resMsg,
+    json: true
+  };
+  request.post(options, function(error, response, body) {
+    // Check for errors
+    if (error) {
+      throw new Error(error);
+    }
+
+    // Check for bad status
+    if (response.statusCode != 200) {
+      throw new Error('Bad response code: ' + response.statusCode);
+    }
+
+    // We must have good data
+    console.log('Response from svc-track:', body);
+  });
+}
 
 // Allow loading of the images
 app.use(express.static('archive'));

@@ -1,11 +1,11 @@
 var restify = require('restify'),
   Logger = require('bunyan'),
   log = new Logger.createLogger({
-    name: 'svc-store',
+    name: 'svc-track',
     serializers: { req: Logger.stdSerializers.req }
   }),
   server = restify.createServer({
-    name: 'svc-store',
+    name: 'svc-track',
     log: log
   });
 
@@ -15,7 +15,7 @@ server.use(restify.plugins.bodyParser());
 
 const Influx = require('influx');
 const influx = new Influx.InfluxDB({
-  host: 'msi',
+  host: '192.168.189.24',
   database: 'laundry',
   schema: [
     {
@@ -28,6 +28,16 @@ const influx = new Influx.InfluxDB({
       tags: []
     }
   ]
+});
+
+influx.ping(5000).then(hosts => {
+  hosts.forEach(host => {
+    if (host.online) {
+      log.info(`${host.url.host} responded in ${host.rtt}ms running ${host.version})`)
+    } else {
+      log.info(`${host.url.host} is offline :(`)
+    }
+  })
 })
 
 // https://stackoverflow.com/questions/20626470/is-there-a-way-to-log-every-request-in-the-console-with-restify
@@ -54,13 +64,14 @@ function rspPrediction(req, res, next) {
         size: req.body.size
       }
     }
-  ])
+  ]).then(() => {
 
-  var rspInfo = {
-    result: 'success'
-  }
-  res.send(rspInfo);
-  next();
+    var rspInfo = {
+      result: 'success'
+    }
+    res.send(rspInfo);
+    next();  
+  });
 }
 
 server.get('/', rspIndex);
