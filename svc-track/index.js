@@ -1,3 +1,5 @@
+var newrelic = require('newrelic');
+
 var restify = require('restify'),
   Logger = require('bunyan'),
   log = new Logger.createLogger({

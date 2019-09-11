@@ -1,7 +1,7 @@
 {
   "name": "svc-track",
   "version": "1.0.0",
-  "description": "",
+  "description": "Service to track laundry predicions",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
