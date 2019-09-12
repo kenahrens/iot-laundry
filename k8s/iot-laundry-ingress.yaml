@@ -1,25 +1,29 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: svc-web
+  name: svc-fanout
 spec:
   rules:
   - host: laundry.minikube
     http:
       paths:
-      - backend:
+      - path: /
+        backend:
           serviceName: svc-web
           servicePort: 8888
----
-apiVersion: networking.k8s.io/v1beta1
-kind: Ingress
-metadata:
-  name: svc-predict
-spec:
-  rules:
-  - host: predict.minikube
-    http:
-      paths:
-      - backend:
+      - path: /stats
+        backend:
+          serviceName: svc-web
+          servicePort: 8888
+      - path: /img
+        backend:
+          serviceName: svc-web
+          servicePort: 8888
+      - path: /predict
+        backend:
           serviceName: svc-predict
           servicePort: 5000
+      - path: /storePredict
+        backend:
+          serviceName: svc-track
+          servicePort: 8889
