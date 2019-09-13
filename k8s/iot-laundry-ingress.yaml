@@ -17,8 +17,8 @@ spec:
           servicePort: 8888
       - path: /img
         backend:
-          serviceName: svc-web
-          servicePort: 8888
+          serviceName: svc-ingest
+          servicePort: 8885
       - path: /predict
         backend:
           serviceName: svc-predict
