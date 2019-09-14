@@ -1,45 +1,37 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: svc-web
+  name: svc-stats
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
-      app: svc-web
+      app: svc-stats
   template:
     metadata:
       labels:
-        app: svc-web
+        app: svc-stats
     spec:
       containers:
-      - name: svc-web
-        image: kenahrens/svc-web
+      - name: svc-stats
+        image: kenahrens/svc-stats
         imagePullPolicy: Never
         livenessProbe:
           httpGet:
-            path: /stats
-            port: 8888
+            path: /
+            port: 8890
           initialDelaySeconds: 5
           periodSeconds: 10
         ports:
-        - containerPort: 8888
+        - containerPort: 8890
           protocol: TCP
         env:
         - name: PORT
-          value: "8888"
+          value: "8890"
         - name: NEW_RELIC_APP_NAME
-          value: "IoT Laundry Server"
+          value: "svc-stats"
         - name: NEW_RELIC_LICENSE_KEY
           valueFrom:
             secretKeyRef:
               name: newrelic
               key: NEW_RELIC_LICENSE_KEY
-        volumeMounts:
-        - name: local-volume
-          mountPath: /app/archive
-      volumes:
-      - name: local-volume
-        hostPath:
-          path: /hosthome/kahrens/Pictures/archive
-          type: Directory

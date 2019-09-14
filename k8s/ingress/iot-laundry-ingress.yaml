@@ -13,8 +13,8 @@ spec:
           servicePort: 5000
       - path: /stats
         backend:
-          serviceName: svc-web
-          servicePort: 8888
+          serviceName: svc-stats
+          servicePort: 8890
       - path: /img
         backend:
           serviceName: svc-ingest
