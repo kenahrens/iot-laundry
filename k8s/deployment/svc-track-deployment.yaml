@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: svc-track
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: svc-track
+  template:
+    metadata:
+      labels:
+        app: svc-track
+    spec:
+      containers:
+      - name: svc-track
+        image: kenahrens/svc-track
+        imagePullPolicy: Never
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8889
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        ports:
+        - containerPort: 8889
+          protocol: TCP
+        env:
+        - name: PORT
+          value: "8889"
+        - name: NEW_RELIC_APP_NAME
+          value: "svc-track"
+        - name: NEW_RELIC_LICENSE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: newrelic
+              key: NEW_RELIC_LICENSE_KEY

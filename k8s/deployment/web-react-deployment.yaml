@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-react
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-react
+  template:
+    metadata:
+      labels:
+        app: web-react
+    spec:
+      containers:
+      - name: web-react
+        image: kenahrens/web-react
+        imagePullPolicy: Never
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        ports:
+        - containerPort: 5000
+          protocol: TCP

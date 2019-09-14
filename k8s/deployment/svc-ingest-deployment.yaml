@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: svc-ingest
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: svc-ingest
+  template:
+    metadata:
+      labels:
+        app: svc-ingest
+    spec:
+      containers:
+      - name: svc-ingest
+        image: kenahrens/ingest
+        imagePullPolicy: Never
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8885
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        ports:
+        - containerPort: 8885
+          protocol: TCP
+        env:
+        - name: NEW_RELIC_APP_NAME
+          value: "svc-ingest"
+        - name: NEW_RELIC_LICENSE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: newrelic
+              key: NEW_RELIC_LICENSE_KEY

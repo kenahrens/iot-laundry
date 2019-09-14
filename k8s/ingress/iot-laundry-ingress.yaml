@@ -9,8 +9,8 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: svc-web
-          servicePort: 8888
+          serviceName: web-react
+          servicePort: 5000
       - path: /stats
         backend:
           serviceName: svc-web
