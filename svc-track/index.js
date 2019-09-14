@@ -1,4 +1,4 @@
-// var newrelic = require('newrelic');
+var newrelic = require('newrelic');
 
 const {server, log} = require('./lib/restify.js');
 const { influx } = require('./lib/influx.js');

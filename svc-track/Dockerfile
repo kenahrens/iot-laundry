@@ -7,5 +7,5 @@ WORKDIR /app
 
 RUN npm install
 
-CMD (sleep 5; node index.js)
+CMD node index.js
 
