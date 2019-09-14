@@ -10,7 +10,7 @@ exports.config = {
   /**
    * Array of application names.
    */
-  app_name: ['IoT Laundry Server'],
+  app_name: ['svc-track'],
   /**
    * Your New Relic license key.
    */
