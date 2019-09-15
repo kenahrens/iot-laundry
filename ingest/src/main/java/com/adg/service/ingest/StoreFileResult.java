@@ -13,6 +13,10 @@ public class StoreFileResult {
     this.size = size;
   }
 
+  public StoreFileResult() {
+    
+  }
+
   public String getFilename() {
     return filename;
   }

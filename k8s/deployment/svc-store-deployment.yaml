@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: svc-store
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: svc-store
+  template:
+    metadata:
+      labels:
+        app: svc-store
+    spec:
+      containers:
+      - name: svc-store
+        image: kenahrens/svc-store
+        imagePullPolicy: Never
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8892
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        ports:
+        - containerPort: 8892
+          protocol: TCP
+        env:
+        - name: PORT
+          value: "8892"
+        - name: NEW_RELIC_APP_NAME
+          value: "svc-store"
+        - name: NEW_RELIC_LICENSE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: newrelic
+              key: NEW_RELIC_LICENSE_KEY
+        volumeMounts:
+        - name: local-volume
+          mountPath: /app/archive
+      volumes:
+      - name: local-volume
+        hostPath:
+          path: /hosthome/kahrens/Pictures/archive
+          type: Directory
+

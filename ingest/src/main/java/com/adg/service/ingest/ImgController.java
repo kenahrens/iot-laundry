@@ -1,6 +1,6 @@
 package com.adg.service.ingest;
 
-import java.util.Date;
+// import java.util.Date;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,6 +17,7 @@ public class ImgController {
 
   public static final String URL_PREDICT = "http://svc-predict:5000/predict";
   public static final String URL_TRACK = "http://svc-track:8889/storePredict";
+  public static final String URL_STORE = "http://svc-store:8892/storeImg";
 
   @PostMapping("/img")
   public ImgResult img(@RequestBody() byte[] imgBytes) throws JSONException {
@@ -70,14 +71,24 @@ public class ImgController {
   }
 
   private StoreFileResult storeFile(byte[] imgBytes, PredictResult predictResult) {
+    RestTemplate restTemplate = new RestTemplate();
 
     // Create the filename
-    Date date = new Date();
-    String filename = "rpi-" + date.getTime() + "-" + predictResult.getPredict() + ".jpg";
-    int size = imgBytes.length;
+    // Date date = new Date();
+    // String filename = "rpi-" + date.getTime() + "-" + predictResult.getPredict() + ".jpg";
+    // int size = imgBytes.length;
 
-    // TODO: Store the file
-    StoreFileResult storeFileResult = new StoreFileResult(filename, size);
+    // // TODO: Store the file
+    // StoreFileResult storeFileResult = new StoreFileResult(filename, size);
+    // return storeFileResult;
+    
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.IMAGE_JPEG);
+    HttpEntity<byte[]> entity = new HttpEntity<byte[]>(imgBytes, headers);
+
+    // Call the endpoint
+    String url = URL_STORE + "/" + predictResult.getPredict();
+    StoreFileResult storeFileResult = restTemplate.postForObject(url, entity, StoreFileResult.class);
     return storeFileResult;
   }
 }

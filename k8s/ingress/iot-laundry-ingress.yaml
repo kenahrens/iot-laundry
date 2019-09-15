@@ -27,3 +27,7 @@ spec:
         backend:
           serviceName: svc-track
           servicePort: 8889
+      - path: /storeImg
+        backend:
+          serviceName: svc-store
+          servicePort: 8892
