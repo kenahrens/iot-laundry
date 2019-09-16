@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: svc-ingest
-        image: kenahrens/ingest
+        image: kenahrens/svc-ingest
         imagePullPolicy: Never
         livenessProbe:
           httpGet:
