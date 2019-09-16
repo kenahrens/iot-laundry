@@ -1,37 +1,25 @@
-# Javascript Node CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-javascript/ for more details
-#
-version: 2
+version: 2.1
 jobs:
-  build:
+  build-test-ingest:
     docker:
-      # specify the version you desire here
-      - image: circleci/node:10
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mongo:3.4.4
-
+      - image: circleci/openjdk:8-jdk
     working_directory: ~/iot-laundry
-
     steps:
       - checkout
+      - run: echo "ingest"
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
+  build-test-nodejs:
+    docker:
+      - image: circleci/node:10
+    working_directory: ~/iot-laundry
+    steps:
+      - checkout
+      - run: echo "nodejs"
 
-      - run: npm install
-
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
-
-      # # run tests!
-      # - run: npm test
+  build-test-python:
+    docker:
+      - image: circleci/python:3
+    working_directory: ~/iot-laundry
+    steps:
+      - checkout
+      - run: echo "python"
