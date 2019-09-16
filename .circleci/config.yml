@@ -1,25 +1,44 @@
-version: 2.1
+# Java Gradle CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-java/ for more details
+#
+version: 2
 jobs:
-  build-test-ingest:
+  build:
     docker:
+      # specify the version you desire here
       - image: circleci/openjdk:8-jdk
-    working_directory: ~/iot-laundry
-    steps:
-      - checkout
-      - run: echo "ingest"
 
-  build-test-nodejs:
-    docker:
-      - image: circleci/node:10
-    working_directory: ~/iot-laundry
-    steps:
-      - checkout
-      - run: echo "nodejs"
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/postgres:9.4
 
-  build-test-python:
-    docker:
-      - image: circleci/python:3
-    working_directory: ~/iot-laundry
+    working_directory: ~/repo
+
+    environment:
+      # Customize the JVM maximum heap limit
+      JVM_OPTS: -Xmx3200m
+      TERM: dumb
+
     steps:
       - checkout
-      - run: echo "python"
+
+      - run: cd ingest
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "build.gradle" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run: gradle dependencies
+
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: v1-dependencies-{{ checksum "build.gradle" }}
+
+      # run tests!
+      - run: gradle test
