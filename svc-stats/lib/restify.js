@@ -16,6 +16,7 @@ server.use(restify.plugins.bodyParser());
 // https://stackoverflow.com/questions/20626470/is-there-a-way-to-log-every-request-in-the-console-with-restify
 server.pre(function(req, rsp, next) {
   req.log.info({req: req}, 'REQUEST');
+  rsp.header('Access-Control-Allow-Origin', '*');
   next();
 })
 
