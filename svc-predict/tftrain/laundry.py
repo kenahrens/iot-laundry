@@ -23,6 +23,7 @@ SHAPE_Z = 3
 
 checkpoint_path = "checkpoints/weights.{epoch:02d}-accuracy{val_accuracy:.2f}.hdf5"
 checkpoint_dir = os.path.dirname(checkpoint_path)
+weights_final = "checkpoints/weights.final.hdf5"
 log_dir = "logs"
 
 # Create a callback that saves the model's weights
