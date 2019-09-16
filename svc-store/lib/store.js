@@ -10,7 +10,8 @@ var storePicture = function storePicture(ts, filename, body, predict) {
   // var dirname = './archive/' + mo.format('YYYY-MM-DD') + '/' + mo.format('HH');
   
   // Create the directory for the day with sub directory for predictions
-  var dirname = './archive/' + mo.format('YYYY-MM-DD') + '/' + predict;
+  // var dirname = './archive/' + mo.format('YYYY-MM-DD') + '/' + predict;
+  var dirname = './archive/' + predict;
   var fullFilename = dirname + '/' + filename;
 
   // Create the directory
