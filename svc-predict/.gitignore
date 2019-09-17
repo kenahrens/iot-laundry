@@ -1,0 +1,11 @@
+# tensorflow images and checkpoints
+**/images/
+**/checkpoints/
+
+# Cache files
+**/__pycache__/
+
+# Test cache
+
+# python
+*.pyc

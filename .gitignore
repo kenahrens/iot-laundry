@@ -20,11 +20,3 @@ pids
 # stored images
 svc-web/archive/
 svc-web/uploads/
-
-# tensorflow images and checkpoints
-svc-predict/tftrain/laundry/
-svc-predict/tftrain/checkpoints/
-svc-predict/tftrain/__pycache__/
-
-# python
-*.pyc

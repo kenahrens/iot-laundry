@@ -1,6 +1,6 @@
 #!/usr/bin/python
 from flask import Flask, jsonify, request, Response
-from tftrain.laundry import LaundryModel
+from laundry.model import LaundryModel
 
 import datetime
 import numpy as np
@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 # Initialize laundry model from checkpoint
 lModel = LaundryModel()
-lModel.load_checkpoint('./tftrain/')
+lModel.load_checkpoint('./predict/laundry/')
 
 @app.route('/', methods=['GET'])
 def index():

@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:3-slim
 
 WORKDIR /usr/src/app
 
@@ -8,4 +8,4 @@ ENV NEW_RELIC_CONFIG_FILE=newrelic.ini
 
 COPY . .
 
-CMD [ "newrelic-admin", "run-program", "python", "./server.py" ]
+CMD [ "newrelic-admin", "run-program", "python", "./predict/server.py" ]

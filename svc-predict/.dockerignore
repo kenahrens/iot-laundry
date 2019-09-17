@@ -1,2 +1,2 @@
 Dockerfile
-tftrain/laundry/*
+predict/laundry/images/*
