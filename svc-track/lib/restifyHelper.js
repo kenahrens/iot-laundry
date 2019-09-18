@@ -1,9 +1,6 @@
-var restify = require('restify'),
-Logger = require('bunyan'),
-log = new Logger.createLogger({
-  name: 'svc-track',
-  serializers: { req: Logger.stdSerializers.req }
-}),
+var restify = require('restify');
+var { log } = require('./logHelper');
+
 server = restify.createServer({
   name: 'svc-track',
   log: log
@@ -19,18 +16,11 @@ server.pre(function(req, rsp, next) {
   next();
 })
 
-function rspIndex(req, res, next) {
-  res.send('The time is ' + new Date());
-  next();
-}
-
-server.get('/', rspIndex);
 var port = process.env.PORT || 8889;
 server.listen(port, function() {
   log.info('%s listening at %s', server.name, server.url);
 });
 
 module.exports = {
-  server: server,
-  log: log
+  server: server
 }
