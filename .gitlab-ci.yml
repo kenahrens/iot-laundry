@@ -1,3 +1,7 @@
+stages:
+  - build
+  - test
+
 job build ingest:
   stage: build
   script:
