@@ -1,0 +1,24 @@
+job build ingest:
+  stage: build
+  script:
+    - cd svc-ingest
+    - ./gradlew build
+    - docker build -t kenahrens/svc-ingest .
+
+job build stats:
+  stage: build
+  script:
+    - cd svc-stats
+    - docker build -t kenahrens/svc-stats .
+
+job test ingest:
+  stage: test
+  script:
+    - cd svc-ingest
+    - ./gradlew test
+
+job test track:
+  stag: test
+  script:
+    - cd svc-track
+    - npm test
