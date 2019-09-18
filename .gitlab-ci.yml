@@ -22,7 +22,7 @@ job test ingest:
     - ./gradlew test
 
 job test track:
-  stag: test
+  stage: test
   script:
     - cd svc-track
     - npm test
