@@ -1,5 +1,3 @@
-// var newrelic = require('newrelic');
-
 const { server } = require('./lib/restifyHelper.js');
 const { log } = require('./lib/logHelper.js');
 const { influxHelper } = require('./lib/influxHelper.js');
